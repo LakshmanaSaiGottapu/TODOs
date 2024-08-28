@@ -25,7 +25,7 @@ function TaskForm({setData}:{setData:React.Dispatch<React.SetStateAction<PayLoad
     }
     return (
         <div style={{display:'flex', justifyContent:'center', padding:'0.25rem', marginTop:'1.5rem'}}>
-            <h3>Dashboard</h3>
+            <h3>TODO Dashboard</h3>
             <form id="taskform" style={{display:'flex', padding:'1rem', position:'absolute', left:'3vw'}} onSubmit={handleSubmit}>
                 <input style={{padding:'0.5rem', margin:'0.25rem', width:'40vw', fontSize:'1rem'}} ref={taskRef}/>
                 <button style={{cursor:'pointer', padding:'0.25rem'}} type="submit">Add Task</button>
