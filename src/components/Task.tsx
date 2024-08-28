@@ -4,12 +4,11 @@ import { TaskType, PayLoad } from "../App";
 function Task({task, setData}:{task:TaskType, setData:React.Dispatch<React.SetStateAction<PayLoad>>}){
     const inputRef = useRef<HTMLInputElement>(null);
     const [editFlag, setEditFlag] = useState<boolean>(false);
-    function handleDelete(){ // e:React.MouseEvent<HTMLButtonElement> 
+    function handleDelete(){
         setData(prev => {
             prev[task.status] = prev[task.status].filter(item => item.id !== task.id);
             return {...prev};
         })
-        // make patch api call
     }
     function handleDone(){
         if(task.status !== 'done')
