@@ -7,7 +7,6 @@ function TaskForm({setData}:{setData:React.Dispatch<React.SetStateAction<PayLoad
         e.preventDefault();
         if(taskRef.current && taskRef.current.value!==''){
             if(taskRef.current.value.length<10){
-
                 return ;
             }
             const task:TaskType = {

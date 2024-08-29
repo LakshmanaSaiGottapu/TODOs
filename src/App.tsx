@@ -28,12 +28,28 @@ function App() {
       })
   }
   }
+  function getEditTask(task:TaskType){
+    return function(newTask:string){
+      setData(prev => {
+        const newTodos = {...prev}
+        for(let t of newTodos[task.status]){
+            if(t.id == task.id){
+                t.task = newTask;
+                break;
+            }
+        }
+        return newTodos;
+      })
+    }
+       
+  }
+  
   return (
     <>
       <TaskForm setData={setData}/>
       <div style={{display:'flex', gap:'20rem', margin:'1rem', justifyContent:'center', border:'1px solid black', padding:'1rem', marginTop:'10vh'}}>
         {Object.keys(data).map((category, index) => <TaskList key={index} category={category}>{
-            data[category as keyof PayLoad].map(task => <Task key={task.id} task={task} setData={setData} deleteTask={getDeleteTask(task)}></Task>)}
+            data[category as keyof PayLoad].map(task => <Task key={task.id} task={task} setData={setData} deleteTask={getDeleteTask(task)} editTask={getEditTask(task)} ></Task>)}
         </TaskList>)}
       </div>
     </>
