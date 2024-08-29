@@ -1,15 +1,9 @@
 import { useRef, useState } from "react";
 import { TaskType, PayLoad } from "../App";
 
-function Task({task, setData}:{task:TaskType, setData:React.Dispatch<React.SetStateAction<PayLoad>>}){
+function Task({task, setData, deleteTask}:{task:TaskType, setData:React.Dispatch<React.SetStateAction<PayLoad>>, deleteTask:()=>void}){
     const inputRef = useRef<HTMLInputElement>(null);
     const [editFlag, setEditFlag] = useState<boolean>(false);
-    function handleDelete(){
-        setData(prev => {
-            prev[task.status] = prev[task.status].filter(item => item.id !== task.id);
-            return {...prev};
-        })
-    }
     function handleDone(){
         if(task.status !== 'done')
         setData(prev => {
@@ -43,7 +37,7 @@ function Task({task, setData}:{task:TaskType, setData:React.Dispatch<React.SetSt
             <div style={{display:'flex'}}>
                 <button onClick={handleEdit}>{editFlag?"save":"edit"}</button>
                 <button onClick={handleDone}>done</button>
-                <button onClick={handleDelete}>delete</button>
+                <button onClick={()=>deleteTask()}>delete</button>
             </div>
         </div>
     )
