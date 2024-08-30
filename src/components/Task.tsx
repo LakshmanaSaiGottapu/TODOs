@@ -5,7 +5,7 @@ function Task({task, setData, deleteTask, editTask}:{task:TaskType, setData:Reac
     const inputRef = useRef<HTMLInputElement>(null);
     const [editFlag, setEditFlag] = useState<boolean>(false);
     function handleDone(){
-        if(task.status !== 'done')
+        if(task.status   !== 'done')
         setData(prev => {
             const filteredTodos = prev[task.status].filter(item => item.id !== task.id);
             prev[task.status] = filteredTodos;

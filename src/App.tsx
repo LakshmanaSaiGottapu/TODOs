@@ -40,8 +40,7 @@ function App() {
         }
         return newTodos;
       })
-    }
-       
+    }   
   }
   
   return (
