@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import TaskList from './components/TaskList'
 import Task from './components/Task'
 import TaskForm from './components/TaskForm'
@@ -13,7 +12,6 @@ export interface PayLoad {
   inprogress: TaskType[],
   done: TaskType[]
 }
-
 function App() {
   const [data, setData] = useState<PayLoad>({
     todo: [{id: "1", task: "clean the room", status: "todo"}, {id: "2", task: "clean the adidas footwear", status: "todo"}],
@@ -26,7 +24,7 @@ function App() {
           prev[task.status] = prev[task.status].filter(item => item.id !== task.id);
           return {...prev};
       })
-  }
+    }
   }
   function getEditTask(task:TaskType){
     return function(newTask:string){
@@ -42,7 +40,6 @@ function App() {
       })
     }   
   }
-  
   return (
     <>
       <TaskForm setData={setData}/>
