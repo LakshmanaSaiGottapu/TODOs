@@ -32,8 +32,7 @@ function TaskForm({setData}:{setData:React.Dispatch<React.SetStateAction<PayLoad
                 prev[formObject['status']].push(task);
                 return {...prev};
             })
-            // formElement.reset();
-            taskRef.current.value='';
+            formElement.reset();
         }
         
     }
