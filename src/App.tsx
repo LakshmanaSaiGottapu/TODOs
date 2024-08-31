@@ -40,9 +40,15 @@ function App() {
       })
     }   
   }
+  function createTask(task: TaskType){
+    setData(prev => {
+        prev[task['status']].push(task);
+        return {...prev};
+    })
+  }
   return (
     <>
-      <TaskForm setData={setData}/>
+      <TaskForm createTask={createTask}/>
       <div style={{display:'flex', gap:'20rem', margin:'1rem', justifyContent:'center', border:'1px solid black', padding:'1rem', marginTop:'10vh'}}>
         {Object.keys(data).map((category, index) => <TaskList key={index} category={category}>{
             data[category as keyof PayLoad].map(task => <Task key={task.id} task={task} setData={setData} deleteTask={getDeleteTask(task)} editTask={getEditTask(task)} ></Task>)}

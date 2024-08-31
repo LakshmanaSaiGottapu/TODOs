@@ -1,7 +1,8 @@
 import { useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { TaskType, PayLoad } from "../App";
-function TaskForm({setData}:{setData:React.Dispatch<React.SetStateAction<PayLoad>>}){
+function TaskForm({createTask}:{createTask:(task:TaskType)=>void}){
+
     const taskRef = useRef<HTMLInputElement>(null);
     type FormObj = Omit<TaskType,'id'>;
     function getFormData(element:HTMLFormElement):FormObj{
@@ -28,10 +29,8 @@ function TaskForm({setData}:{setData:React.Dispatch<React.SetStateAction<PayLoad
                 id: uuidv4(),
                 ...formObject
             }
-            setData(prev => {
-                prev[formObject['status']].push(task);
-                return {...prev};
-            })
+            createTask(task);
+            
             formElement.reset();
         }
         
