@@ -36,18 +36,21 @@ function TaskForm({createTask}:{createTask:(task:TaskType)=>void}){
         
     }
     return (
-        <div style={{display:'flex', justifyContent:'center', padding:'0.25rem', marginTop:'1.5rem'}}>
-            <h3>TODO Dashboard</h3>
-            <form id="taskform" style={{display:'flex', gap:'0.25rem', padding:'1rem', position:'absolute', left:'3vw'}} onSubmit={handleSubmit}>
-                <input name="task" style={{padding:'0.5rem', margin:'0.25rem', width:'40vw', fontSize:'1rem'}} ref={taskRef}/>
-                <select name="status" id="">
-                    <option value="todo">todo</option>
-                    <option value="inprogress">inprogress</option>
-                    <option value="done">done</option>
-                </select>
-                <button style={{cursor:'pointer', padding:'0.25rem'}} type="submit">Add Task</button>
-            </form>
-        </div>
+        <>
+            <div style={{display:'flex', justifyContent:'center', padding:'0.25rem', marginTop:'1.5rem'}}>
+                <form id="taskform" style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'0.25rem', padding:'1rem', }} onSubmit={handleSubmit}>
+                        <div>
+                        <input name="task" style={{padding:'0.5rem', margin:'0.25rem', width:'40vw', fontSize:'1rem'}} ref={taskRef}/>
+                        <select name="status" id="" style={{cursor:'pointer'}}>
+                            <option value="todo">todo</option>
+                            <option value="inprogress">inprogress</option>
+                            <option value="done">done</option>
+                        </select>
+                        </div>
+                    <button style={{cursor:'pointer', padding:'0.25rem', maxWidth:'8rem', position:'relative', right:'2rem'}} type="submit">Add Task</button>
+                </form>
+            </div>
+        </>
     )
 }
 

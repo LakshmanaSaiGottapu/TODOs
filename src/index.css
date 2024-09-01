@@ -2,7 +2,7 @@
     content: 'more than 10 characters should be given as a task';
     background-color: lightgray;
     transition: all ease-in-out 0.6s;
-    position: relative;
+    /*  position: relative; */
     left: 30rem;
     bottom: 1.8rem;
     height: 2rem;
