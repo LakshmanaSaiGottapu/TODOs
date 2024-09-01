@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import TaskList from './components/TaskList'
 import Task from './components/Task'
 import TaskForm from './components/TaskForm'
@@ -14,10 +14,13 @@ export interface PayLoad {
 }
 function App() {
   const [data, setData] = useState<PayLoad>({
-    todo: [{id: "1", task: "clean the room", status: "todo"}, {id: "2", task: "clean the adidas footwear", status: "todo"}],
-    inprogress: [{id: "3", task: "testing AEG", status: "inprogress"}, {id: "4", task: "testing filter WS1 & Intune", status: "inprogress"}],
-    done: [{id: "5", task: "house warming function", status: "done"}, {id: "6", task: "repair the bike", status: "done"}]
+    todo: [{id: "1", task: "clean the room", status: "todo"}],
+    inprogress: [{id: "2", task: "testing AEG", status: "inprogress"}],
+    done: [{id: "3", task: "house warming function", status: "done"}]
   });
+  const emptyFormTask = useMemo<TaskType>(()=> {return {id:"", task:"", status:"todo"}},[]);
+  const [formTask, setFormTask] = useState<TaskType>(emptyFormTask);
+  
   function getDeleteTask(task:TaskType){
     return function(){
       setData(prev => {
@@ -26,32 +29,43 @@ function App() {
       })
     }
   }
-  function getEditTask(task:TaskType){
-    return function(newTask:string){
-      setData(prev => {
-        const newTodos = {...prev}
-        for(let t of newTodos[task.status]){
-            if(t.id == task.id){
-                t.task = newTask;
-                break;
+  
+  function editTask(task:TaskType){
+    setData(prev => {
+      const newTodos = {...prev}
+      const statusArray = ["todo", "inprogress", "done"];
+      statusArray.map(status => {
+        for(let t of newTodos[status as "todo"|"done"|"inprogress"]){
+          if(t.id == task.id){
+            if(t.status !== task.status){
+              newTodos[t.status] = newTodos[t.status].filter((todo) => todo.id !== t.id);
+              newTodos[task.status].push(task);
             }
-        }
-        return newTodos;
+            else{
+              t.task = task.task;
+            }
+            break;
+          }
+        } 
       })
-    }   
-  }
+      
+      console.log('newTodos: ', newTodos);
+      return newTodos;
+    })
+  }   
   function createTask(task: TaskType){
     setData(prev => {
         prev[task['status']].push(task);
         return {...prev};
     })
   }
+
   return (
     <>
-      <TaskForm createTask={createTask}/>
-      <div style={{display:'flex', gap:'20rem', margin:'1rem', justifyContent:'center', border:'1px solid black', padding:'1rem', marginTop:'10vh'}}>
+      <TaskForm createTask={createTask} formTask={formTask} editTask={editTask} setFormTask={setFormTask}/>
+      <div style={{display:'flex', gap:'20rem', margin:'1rem', justifyContent:'center', border:'1px solid black', padding:'1rem', marginTop:'2vh'}}>
         {Object.keys(data).map((category, index) => <TaskList key={index} category={category}>{
-            data[category as keyof PayLoad].map(task => <Task key={task.id} task={task} setData={setData} deleteTask={getDeleteTask(task)} editTask={getEditTask(task)} ></Task>)}
+            data[category as keyof PayLoad].map(task => <Task key={task.id} task={task} setData={setData} deleteTask={getDeleteTask(task)} setFormTask={setFormTask}></Task>)}
         </TaskList>)}
       </div>
     </>

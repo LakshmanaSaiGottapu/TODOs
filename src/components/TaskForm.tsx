@@ -1,56 +1,54 @@
 import { useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { TaskType, PayLoad } from "../App";
-function TaskForm({createTask}:{createTask:(task:TaskType)=>void}){
-
+import { TaskType } from "../App";
+function TaskForm({createTask, formTask, editTask, setFormTask}:{createTask:(task:TaskType)=>void, formTask:TaskType, editTask:(task:TaskType)=>void, setFormTask:React.Dispatch<React.SetStateAction<TaskType>>}){
+    const formRef = useRef<HTMLFormElement>(null);
     const taskRef = useRef<HTMLInputElement>(null);
-    type FormObj = Omit<TaskType,'id'>;
-    function getFormData(element:HTMLFormElement):FormObj{
-        const formData = new FormData(element);
-        let formObj:FormObj = {task:"", status:"todo"};
-        for(let entry of formData.entries()){
-            if(entry[0] == "task")
-                formObj[entry[0] as "task"] = entry[1] as string;
-            else if(entry[0] == "status")
-                formObj[entry[0] as "status"] = entry[1] as ("todo"|"inprogress"|"done");
-        }
-        return formObj;
-    }
     function handleSubmit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
-        const formElement = e.target as HTMLFormElement;
-        const formObject = getFormData(formElement);
-        console.log(formObject);
         if(taskRef.current && taskRef.current.value!==''){
-            if(taskRef.current.value.length<10){
-                return ;
+            if(taskRef.current.value.length<10) return ;
+            if(formTask.id) editTask(formTask);
+            else{
+                const task:TaskType = {
+                    id: uuidv4(),
+                    task: formTask.task,
+                    status: formTask.status
+                }
+                createTask(task);
             }
-            const task:TaskType = {
-                id: uuidv4(),
-                ...formObject
-            }
-            createTask(task);
-            
-            formElement.reset();
         }
-        
+        resetFormTask();
+    }
+    function resetFormTask(){
+        if(formRef.current)
+            formRef.current.reset();
+        setFormTask({id:"", task:"", status:"inprogress"});
     }
     return (
-        <>
-            <div style={{display:'flex', justifyContent:'center', padding:'0.25rem', marginTop:'1.5rem'}}>
-                <form id="taskform" style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'0.25rem', padding:'1rem', }} onSubmit={handleSubmit}>
-                        <div>
-                        <input name="task" style={{padding:'0.5rem', margin:'0.25rem', width:'40vw', fontSize:'1rem'}} ref={taskRef}/>
-                        <select name="status" id="" style={{cursor:'pointer'}}>
-                            <option value="todo">todo</option>
-                            <option value="inprogress">inprogress</option>
-                            <option value="done">done</option>
-                        </select>
-                        </div>
-                    <button style={{cursor:'pointer', padding:'0.25rem', maxWidth:'8rem', position:'relative', right:'2rem'}} type="submit">Add Task</button>
-                </form>
-            </div>
-        </>
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'0.25rem', marginTop:'1.5rem'}}>
+            <form id="taskform" ref={formRef} style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'0.25rem', padding:'1rem'}} onSubmit={handleSubmit}>
+                <div>
+                    <input name="task" style={{padding:'0.5rem', margin:'0.25rem', width:'40vw', fontSize:'1rem'}} ref={taskRef} value={formTask.task} onChange={(e) => setFormTask({ ...formTask, task: e.target.value })}
+                    />
+                    <select name="status" id="" 
+                         value={formTask.status} 
+                         onChange={(e) => setFormTask({ ...formTask, status: e.target.value as "todo"|"inprogress"|"done" })}
+                    >
+                        <option value="todo" >todo</option>
+                        <option value="inprogress">inprogress</option>
+                        <option value="done">done</option>
+                    </select>
+                </div>
+                <button style={{cursor:'pointer', padding:'0.25rem'}} type="submit">{formTask.id?"Edit Task":"Create Task"}</button>
+            </form>
+            <button onClick={()=>{ 
+                resetFormTask();
+                if(formRef.current)
+                    formRef.current.reset();
+            }}>clear
+            </button>
+        </div>
     )
 }
 
