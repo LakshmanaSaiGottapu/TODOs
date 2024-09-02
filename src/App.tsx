@@ -33,6 +33,7 @@ function App() {
             data[category as keyof PayLoad].map(task => <Task key={task.id} task={task} dispatch={dispatch}  setFormTask={setFormTask}></Task>)}
         </TaskList>)}
       </div>
+      <div>footer</div>
     </>
   )
 }
