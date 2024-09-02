@@ -29,6 +29,7 @@ function TaskForm({dispatch, formTask, setFormTask}:{dispatch:React.Dispatch<Act
     return (
         <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'0.25rem', marginTop:'1.5rem'}}>
             <h3>TODO Dashboard</h3>
+            <p>description</p>
             <form id="taskform" ref={formRef} style={{display:'flex', flexDirection:'column', alignItems:'center', gap:'0.25rem', padding:'1rem'}} onSubmit={handleSubmit}>
                 <div>
                     <input name="task" style={{padding:'0.5rem', margin:'0.25rem', width:'40vw', fontSize:'1rem'}} ref={taskRef} value={formTask.task} onChange={(e) => setFormTask({ ...formTask, task: e.target.value })}
