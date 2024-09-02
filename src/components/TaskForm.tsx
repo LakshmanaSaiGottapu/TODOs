@@ -1,22 +1,21 @@
 import { useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { TaskType } from "../App";
-import { Action } from "../reducer";
-function TaskForm({dispatch, formTask, setFormTask}:{dispatch:React.Dispatch<Action>, formTask:TaskType, setFormTask:React.Dispatch<React.SetStateAction<TaskType>>}){
+function TaskForm({createTask, formTask, editTask, setFormTask}:{createTask:(task:TaskType)=>void, formTask:TaskType, editTask:(task:TaskType)=>void, setFormTask:React.Dispatch<React.SetStateAction<TaskType>>}){
     const formRef = useRef<HTMLFormElement>(null);
     const taskRef = useRef<HTMLInputElement>(null);
     function handleSubmit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
         if(taskRef.current && taskRef.current.value!==''){
             if(taskRef.current.value.length<10) return ;
-            if(formTask.id) dispatch({type:'edit', task:formTask});
+            if(formTask.id) editTask(formTask);
             else{
                 const task:TaskType = {
                     id: uuidv4(),
                     task: formTask.task,
                     status: formTask.status
                 }
-                dispatch({type:'create',task});
+                createTask(task);
             }
         }
         resetFormTask();
@@ -24,7 +23,7 @@ function TaskForm({dispatch, formTask, setFormTask}:{dispatch:React.Dispatch<Act
     function resetFormTask(){
         if(formRef.current)
             formRef.current.reset();
-        setFormTask({id:"", task:"", status:"todo"});
+        setFormTask({id:"", task:"", status:"inprogress"});
     }
     return (
         <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'0.25rem', marginTop:'1.5rem'}}>
